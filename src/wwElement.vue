@@ -21,17 +21,14 @@
 </template>
 
 <script>
-import draggable from 'vuedraggable';
 import { provide } from 'vue'
 
 export default {
-  components: {
-    draggable,
-  },
   props: {
     content: { type: Object, required: true },
     uid: { type: String, required: true },
   },
+  emits: ['trigger-event', 'update:content:effect'],
   setup(props, {emit}) {
     provide('customHandler', (change, {stack: stackValue}) => {
       if (change.moved) {
@@ -62,7 +59,6 @@ export default {
     })
   },
   data: () => ({
-    drag: false,
     internalStacks: [],
     uncategorizedStack: {
       label: 'Uncategorized',
