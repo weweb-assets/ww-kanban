@@ -1,60 +1,20 @@
 <template>
   <div class="ww-kanban">
     <div v-if="content.uncategorizedStack" class="ww-kanban-stack">
-      <wwLayoutItemContext index="0" :item="uncategorizedStack" :data="uncategorizedStack" is-repeat>
-        <draggable 
-          :list="uncategorizedStack.items" 
-          :item-key="content.itemKey || 'id'"
-          :clone="el => el"
-          group="stacks" 
-          :sort="content.allowFreeOrdering"
-          @change="handleChange($event, null)"
-        >
-          <template #header>
-            <wwLayout path="headerElement"></wwLayout>
-          </template>
-          <template #item="{ element, index: itemIndex }">
-            <div>
-              <wwLayoutItemContext :index="itemIndex" :item="element" is-repeat :data="element">
-                <wwLayout path="itemElement"></wwLayout>
-              </wwLayoutItemContext>
-            </div>
-          </template>
-          <template #footer>
-            <wwLayout path="footerElement"></wwLayout>
-          </template>
-        </draggable>
+      <wwLayoutItemContext :index="0" :item="uncategorizedStack" :data="uncategorizedStack" is-repeat>
+        <wwElement 
+          v-bind="content.stackElement" 
+          :ww-props="{ ...stackConfig, items: uncategorizedStack.items, stack: null }"
+        ></wwElement>
       </wwLayoutItemContext>
     </div>
 
     <div v-for="(stack, index) in internalStacks" class="ww-kanban-stack">
       <wwLayoutItemContext :index="index" :item="stack" is-repeat :data="stack">
-        <wwLayout path="stackElement">
-          <template #default>
-            <draggable 
-              :list="stack.items" 
-              :item-key="content.itemKey || 'id'"
-              :clone="el => el"
-              group="stacks" 
-              :sort="content.allowFreeOrdering"
-              @change="handleChange($event, stack.value)"
-            >
-              <template #header>
-                <wwLayout path="headerElement"></wwLayout>
-              </template>
-              <template #item="{ element, index: itemIndex }">
-                <div>
-                  <wwLayoutItemContext :index="itemIndex" :item="element" is-repeat :data="element">
-                    <wwLayout path="itemElement"></wwLayout>
-                  </wwLayoutItemContext>
-                </div>
-              </template>
-              <template #footer>
-                <wwLayout path="footerElement"></wwLayout>
-              </template>
-            </draggable>
-          </template>
-        </wwLayout>
+        <wwElement 
+          v-bind="content.stackElement" 
+          :ww-props="{ ...stackConfig, items: stack.items, stack: stack.value }"
+        ></wwElement>
       </wwLayoutItemContext>
     </div>
   </div>
@@ -62,6 +22,7 @@
 
 <script>
 import draggable from 'vuedraggable';
+import { provide } from 'vue'
 
 export default {
   components: {
@@ -69,10 +30,45 @@ export default {
   },
   props: {
     content: { type: Object, required: true },
+    uid: { type: String, required: true },
+  },
+  setup(props, {emit}) {
+    provide('customHandler', (change, {stack: stackValue}) => {
+      if (change.moved) {
+        emit('trigger-event', { 
+          name: 'item:moved', 
+          event: { 
+            item: change.moved.element,
+            from: stackValue,
+            to: stackValue,
+            oldIndex: change.moved.oldIndex,
+            newIndex: change.moved.newIndex,
+          }
+        })
+      }
+
+      if (change.added) {
+        emit('trigger-event', {
+          name: 'item:moved',
+          event: {
+            item: change.added.element,
+            from: wwLib.resolveObjectPropertyPath(change.added.element, props.content.stackedBy),
+            to: stackValue,
+            oldIndex: null,
+            newIndex: change.added.newIndex,
+          }
+        })
+      }
+    })
   },
   data: () => ({
     drag: false,
-    internalStacks: []
+    internalStacks: [],
+    uncategorizedStack: {
+      label: 'Uncategorized',
+      value: null,
+      items: []
+    }
   }),
   computed: {
     stacks() {
@@ -85,12 +81,11 @@ export default {
       if (!Array.isArray(items)) return []
       return items
     },
-    uncategorizedStack() {
-      const stacksList = this.stacks.map(stack => wwLib.resolveObjectPropertyPath(stack, this.content.stackValue || 'value'))
+    stackConfig() {
       return {
-        label: 'Uncategorized',
-        value: null,
-        items: this.items.filter(item => !stacksList.includes(wwLib.resolveObjectPropertyPath(item, this.content.stackedBy)))
+        sortable: this.content.sortable, 
+        group: 'kanban-' + this.uid,
+        itemKey: this.content.itemKey
       }
     }
   },
@@ -121,34 +116,9 @@ export default {
               .filter(item => wwLib.resolveObjectPropertyPath(item, this.content.stackedBy) === stack.value)
               .sort((a, b) => wwLib.resolveObjectPropertyPath(a, this.content.sortedBy) > wwLib.resolveObjectPropertyPath(b, this.content.sortedBy) ? 1 : -1)
           }))
+      const stacksList = this.stacks.map(stack => wwLib.resolveObjectPropertyPath(stack, this.content.stackValue || 'value'))
+      this.uncategorizedStack.items = this.items.filter(item => !stacksList.includes(wwLib.resolveObjectPropertyPath(item, this.content.stackedBy)))
     },
-    handleChange(change, stackValue) {
-      if (change.moved) {
-        this.$emit('trigger-event', { 
-          name: 'item:moved', 
-          event: { 
-            item: change.moved.element,
-            from: stackValue,
-            to: stackValue,
-            oldIndex: change.moved.oldIndex,
-            newIndex: change.moved.newIndex,
-          }
-        })
-      }
-
-      if (change.added) {
-        this.$emit('trigger-event', {
-          name: 'item:moved',
-          event: {
-            item: change.added.element,
-            from: wwLib.resolveObjectPropertyPath(change.added.element, this.content.stackedBy),
-            to: stackValue,
-            oldIndex: null,
-            newIndex: change.added.newIndex,
-          }
-        })
-      }
-    }
   },
   created() {
     this.refreshStacks()

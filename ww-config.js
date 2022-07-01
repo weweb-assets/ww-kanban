@@ -33,31 +33,7 @@ export default {
   properties: {
     stackElement: {
       hidden: true,
-      defaultValue: [{ isWwObject: true, type: "ww-flexbox" }],
-      navigator: {
-        group: 'Stack',
-      },
-    },
-    itemElement: {
-      hidden: true,
-      defaultValue: [{ isWwObject: true, type: "ww-flexbox" }],
-      navigator: {
-        group: 'Item',
-      },
-    },
-    headerElement: {
-      hidden: true,
-      defaultValue: [{ isWwObject: true, type: "ww-text" }],
-      navigator: {
-        group: 'Header',
-      },
-    },
-    footerElement: {
-      hidden: true,
-      defaultValue: [],
-      navigator: {
-        group: 'Footer',
-      },
+      defaultValue: { isWwObject: true, type: 'ww-stack' },
     },
     items: {
       label: {
@@ -101,10 +77,10 @@ export default {
       defaultValue: null,
       section: 'settings',
     },
-    allowFreeOrdering: {
+    sortable: {
       hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('items', {content, boundProps}),
       label: {
-        en: 'Free ordering',
+        en: 'Sortable',
       },
       type: 'OnOff',
       defaultValue: true,
