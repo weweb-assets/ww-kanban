@@ -33,7 +33,7 @@ export default {
   properties: {
     stackElement: {
       hidden: true,
-      defaultValue: { isWwObject: true, type: 'ww-stack' },
+      defaultValue: { isWwObject: true, type: '895f7e01-3415-4add-83e3-b2b66a4bd220' },
     },
     items: {
       label: {
