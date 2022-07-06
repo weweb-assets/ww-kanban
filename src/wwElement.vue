@@ -1,7 +1,7 @@
 <template>
   <div class="ww-kanban">
     <div v-if="content.uncategorizedStack" class="ww-kanban-stack">
-      <wwLayoutItemContext :index="0" :item="uncategorizedStack" :data="uncategorizedStack" is-repeat>
+      <wwLayoutItemContext :index="0" :item="null" :data="uncategorizedStack" is-repeat>
         <wwElement 
           v-bind="content.stackElement" 
           :ww-props="{ ...stackConfig, items: uncategorizedStack.items, stack: null }"
@@ -10,7 +10,7 @@
     </div>
 
     <div v-for="(stack, index) in internalStacks" class="ww-kanban-stack">
-      <wwLayoutItemContext :index="index" :item="stack" is-repeat :data="stack">
+      <wwLayoutItemContext :index="index" :item="null" is-repeat :data="stack">
         <wwElement 
           v-bind="content.stackElement" 
           :ww-props="{ ...stackConfig, items: stack.items, stack: stack.value }"
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { provide, ref } from 'vue'
+import { provide, reactive, ref, watch } from 'vue'
 
 export default {
   props: {
@@ -31,11 +31,12 @@ export default {
   emits: ['trigger-event', 'update:content:effect'],
   setup(props, {emit}) {
     const internalStacks = ref([])
-    const uncategorizedStack = ref({
+    const uncategorizedStack = reactive({
       label: 'Uncategorized',
       value: null,
       items: []
     })
+    
     provide('customHandler', (change, {stack: stackValue, updatedStackItems}) => {
       if (change.moved) {
         emit('trigger-event', { 
@@ -65,6 +66,21 @@ export default {
         })
       }
     })
+
+    const isDraggingManager = reactive({})
+    provide('customDragHandler', (isDragging, {stack}) => isDraggingManager[stack] = isDragging)
+  
+    const { setValue: setDrag } = wwLib.wwVariable.useComponentVariable({
+      uid: props.uid,
+      name: 'isDragging',
+      type: 'boolean',
+      defaultValue: false,
+      readonly: true,
+    });
+    watch(isDraggingManager, (value) => {
+      setDrag(Object.values(value).some(isDragging => isDragging))
+    }, {deep: true})
+
     return { internalStacks, uncategorizedStack }
   },
   computed: {
