@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { provide } from 'vue'
+import { provide, ref } from 'vue'
 
 export default {
   props: {
@@ -30,7 +30,13 @@ export default {
   },
   emits: ['trigger-event', 'update:content:effect'],
   setup(props, {emit}) {
-    provide('customHandler', (change, {stack: stackValue}) => {
+    const internalStacks = ref([])
+    const uncategorizedStack = ref({
+      label: 'Uncategorized',
+      value: null,
+      items: []
+    })
+    provide('customHandler', (change, {stack: stackValue, updatedStackItems}) => {
       if (change.moved) {
         emit('trigger-event', { 
           name: 'item:moved', 
@@ -40,6 +46,7 @@ export default {
             to: stackValue,
             oldIndex: change.moved.oldIndex,
             newIndex: change.moved.newIndex,
+            updatedList: updatedStackItems
           }
         })
       }
@@ -53,19 +60,13 @@ export default {
             to: stackValue,
             oldIndex: null,
             newIndex: change.added.newIndex,
+            updatedList: updatedStackItems
           }
         })
       }
     })
+    return { internalStacks, uncategorizedStack }
   },
-  data: () => ({
-    internalStacks: [],
-    uncategorizedStack: {
-      label: 'Uncategorized',
-      value: null,
-      items: []
-    }
-  }),
   computed: {
     stacks() {
       const stacks = wwLib.wwCollection.getCollectionData(this.content.stacks)

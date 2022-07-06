@@ -27,6 +27,7 @@ export default {
         to: '',
         oldIndex: 0,
         newIndex: 1,
+        updatedList: []
       } 
     },
   ],
