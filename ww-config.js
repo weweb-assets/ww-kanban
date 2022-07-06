@@ -34,7 +34,8 @@ export default {
   properties: {
     stackElement: {
       hidden: true,
-      defaultValue: { isWwObject: true, type: '895f7e01-3415-4add-83e3-b2b66a4bd220' },
+      //ww-stack
+      defaultValue: { isWwObject: true, type: '5a88036f-22ea-4f8d-b4a5-bc226ef95061' },
     },
     items: {
       label: {
