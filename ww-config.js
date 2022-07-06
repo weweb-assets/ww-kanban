@@ -15,6 +15,7 @@ export default {
     label: {
       en: 'Kanban',
     },
+    icon: 'fontawesome/solid/trello-brands',
     customSettingsPropertiesOrder: ['items', ['itemKey', 'stackedBy', 'sortedBy', 'allowManualSort']]
   },
   triggerEvents: [
