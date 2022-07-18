@@ -15,6 +15,7 @@ export default {
     label: {
       en: 'Kanban',
     },
+    icon: 'fontawesome/solid/trello-brands',
     customSettingsPropertiesOrder: ['items', ['itemKey', 'stackedBy', 'sortedBy', 'sortOrder']]
   },
   triggerEvents: [
@@ -34,7 +35,8 @@ export default {
   properties: {
     stackElement: {
       hidden: true,
-      defaultValue: { isWwObject: true, type: 'ww-stack' },
+      //ww-stack
+      defaultValue: { isWwObject: true, type: '5a88036f-22ea-4f8d-b4a5-bc226ef95061' },
     },
     wrapStacks: {
       label: {
