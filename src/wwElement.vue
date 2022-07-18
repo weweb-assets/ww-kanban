@@ -108,6 +108,9 @@ export default {
     }
   },
   watch: {
+    'content.stackValue'() {
+      this.refreshStacks()
+    },
     'content.stackedBy'() {
       this.refreshStacks()
     },
