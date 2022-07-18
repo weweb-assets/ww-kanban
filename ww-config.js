@@ -15,7 +15,7 @@ export default {
     label: {
       en: 'Kanban',
     },
-    customSettingsPropertiesOrder: ['items', ['itemKey', 'stackedBy', 'sortedBy', 'allowManualSort']]
+    customSettingsPropertiesOrder: ['items', ['itemKey', 'stackedBy', 'sortedBy', 'sortOrder']]
   },
   triggerEvents: [
     { 
@@ -34,7 +34,14 @@ export default {
   properties: {
     stackElement: {
       hidden: true,
-      defaultValue: { isWwObject: true, type: '895f7e01-3415-4add-83e3-b2b66a4bd220' },
+      defaultValue: { isWwObject: true, type: 'ww-stack' },
+    },
+    wrapStacks: {
+      label: {
+        en: 'Wrap stacks',
+      },
+      type: 'OnOff',
+      defaultValue: true
     },
     items: {
       label: {
@@ -77,6 +84,28 @@ export default {
       options: content => getObjectPropertyPathOptions('items', {content}),
       defaultValue: null,
       section: 'settings',
+    },
+    sortOrder: {
+      hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('items', {content, boundProps}) || !content.sortedBy,
+      label: {
+        en: 'Sort order'
+      },
+      type: 'TextRadioGroup',
+      options: {
+        choices: [
+          {
+            label: { en: 'Asc' },
+            value: 'asc',
+            default: true,
+          },
+          {
+            label: { en: 'Desc' },
+            value: 'desc',
+          },
+        ]
+      },
+      defaultValue: 'asc',
+      section: 'settings'
     },
     sortable: {
       hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('items', {content, boundProps}),
