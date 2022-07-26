@@ -16,7 +16,7 @@ export default {
       en: 'Kanban',
     },
     icon: 'fontawesome/solid/trello-brands',
-    customSettingsPropertiesOrder: ['items', ['itemKey', 'stackedBy', 'sortedBy', 'allowManualSort']]
+    customSettingsPropertiesOrder: ['items', ['itemKey', 'stackedBy', 'sortedBy', 'sortOrder']]
   },
   triggerEvents: [
     { 
@@ -37,6 +37,13 @@ export default {
       hidden: true,
       //ww-stack
       defaultValue: { isWwObject: true, type: '5a88036f-22ea-4f8d-b4a5-bc226ef95061' },
+    },
+    wrapStacks: {
+      label: {
+        en: 'Wrap stacks',
+      },
+      type: 'OnOff',
+      defaultValue: true
     },
     items: {
       label: {
@@ -79,6 +86,29 @@ export default {
       options: content => getObjectPropertyPathOptions('items', {content}),
       defaultValue: null,
       section: 'settings',
+    },
+    sortOrder: {
+      hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('items', {content, boundProps}) || !content.sortedBy,
+      label: {
+        en: 'Sort order'
+      },
+      type: 'TextRadioGroup',
+      options: {
+        choices: [
+          {
+            label: { en: 'Asc' },
+            value: 'asc',
+            default: true,
+          },
+          {
+            label: { en: 'Desc' },
+            value: 'desc',
+          },
+        ]
+      },
+      defaultValue: 'asc',
+      bindable: true,
+      section: 'settings'
     },
     sortable: {
       hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('items', {content, boundProps}),

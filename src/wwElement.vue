@@ -1,5 +1,5 @@
 <template>
-  <div class="ww-kanban">
+  <div class="ww-kanban" :style="kanbanStyle">
     <div v-if="content.uncategorizedStack" class="ww-kanban-stack">
       <wwLayoutItemContext :index="0" :item="null" :data="uncategorizedStack" is-repeat>
         <wwElement 
@@ -10,7 +10,7 @@
     </div>
 
     <div v-for="(stack, index) in internalStacks" class="ww-kanban-stack">
-      <wwLayoutItemContext :index="index" :item="null" is-repeat :data="stack" :repeated-list="internalStacks">
+      <wwLayoutItemContext :index="index" :item="null" is-repeat :data="stack" :repeated-items="internalStacks">
         <wwElement 
           v-bind="content.stackElement" 
           :ww-props="{ ...stackConfig, items: stack.items, stack: stack.value }"
@@ -100,13 +100,24 @@ export default {
         group: 'kanban-' + this.uid,
         itemKey: this.content.itemKey
       }
+    },
+    kanbanStyle() {
+      return {
+        '--wrap-stacks': this.content.wrapStacks ? 'wrap' : 'nowrap'
+      }
     }
   },
   watch: {
+    'content.stackValue'() {
+      this.refreshStacks()
+    },
     'content.stackedBy'() {
       this.refreshStacks()
     },
     'content.sortedBy'() {
+      this.refreshStacks()
+    },
+    'content.sortOrder'() {
       this.refreshStacks()
     },
     stacks() {
@@ -117,7 +128,7 @@ export default {
     }
   },
   methods: {
-    refreshStacks(truc) {
+    refreshStacks() {
       this.internalStacks = this.stacks
           .map(stack => ({
             label: wwLib.resolveObjectPropertyPath(stack, this.content.stackLabel || 'label') || '',
@@ -127,7 +138,16 @@ export default {
             ...stack,
             items: this.items
               .filter(item => wwLib.resolveObjectPropertyPath(item, this.content.stackedBy) === stack.value)
-              .sort((a, b) => wwLib.resolveObjectPropertyPath(a, this.content.sortedBy) > wwLib.resolveObjectPropertyPath(b, this.content.sortedBy) ? 1 : -1)
+              .sort((a, b) => {
+                if(!this.content.sortedBy) return 0
+                const valueA = wwLib.resolveObjectPropertyPath(a, this.content.sortedBy)
+                const valueB = wwLib.resolveObjectPropertyPath(b, this.content.sortedBy)
+                if (this.content.sortOrder === 'asc') {
+                  return valueA > valueB ? 1 : -1
+                } else {
+                  return valueA > valueB ? -1 : 1
+                }
+              })
           }))
       const stacksList = this.stacks.map(stack => wwLib.resolveObjectPropertyPath(stack, this.content.stackValue || 'value'))
       this.uncategorizedStack.items = this.items.filter(item => !stacksList.includes(wwLib.resolveObjectPropertyPath(item, this.content.stackedBy)))
@@ -143,6 +163,6 @@ export default {
 .ww-kanban {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: var(--wrap-stacks);
 }
 </style>
