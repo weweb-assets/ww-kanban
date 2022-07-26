@@ -107,6 +107,7 @@ export default {
         ]
       },
       defaultValue: 'asc',
+      bindable: true,
       section: 'settings'
     },
     sortable: {
