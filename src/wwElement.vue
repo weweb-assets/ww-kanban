@@ -10,7 +10,7 @@
     </div>
 
     <div v-for="(stack, index) in internalStacks" class="ww-kanban-stack">
-      <wwLayoutItemContext :index="index" :item="null" is-repeat :data="stack" :repeated-list="internalStacks">
+      <wwLayoutItemContext :index="index" :item="null" is-repeat :data="stack" :repeated-items="internalStacks">
         <wwElement 
           v-bind="content.stackElement" 
           :ww-props="{ ...stackConfig, items: stack.items, stack: stack.value }"
