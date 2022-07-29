@@ -15,6 +15,9 @@ export default {
     label: {
       en: 'Kanban',
     },
+    bubble: {
+      icon: 'fontawesome/solid/trello-brands',
+    },
     icon: 'fontawesome/solid/trello-brands',
     customSettingsPropertiesOrder: ['items', ['itemKey', 'stackedBy', 'sortedBy', 'sortOrder']]
   },
@@ -135,6 +138,7 @@ export default {
       bindable: true,
       options: {
         movable: true,
+        expandable: true,
         getItemLabel(_, index) {
           return `Stack ${index + 1}`;
         },
