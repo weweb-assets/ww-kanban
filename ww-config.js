@@ -22,17 +22,18 @@ export default {
     customSettingsPropertiesOrder: ['items', ['itemKey', 'stackedBy', 'sortedBy', 'sortOrder']]
   },
   triggerEvents: [
-    { 
+    {
       name: 'item:moved',
       label: { en: 'On item moved' },
-      event: { 
+      event: {
         item: {},
         from: '',
         to: '',
         oldIndex: 0,
         newIndex: 1,
         updatedList: []
-      } 
+      },
+      default: true
     },
   ],
   properties: {
