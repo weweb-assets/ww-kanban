@@ -1,22 +1,24 @@
 <template>
   <div class="ww-kanban" :style="kanbanStyle">
-    <div v-if="content.uncategorizedStack" class="ww-kanban-stack">
+    <template v-if="content.uncategorizedStack">
       <wwLayoutItemContext :index="0" :item="null" :data="uncategorizedStack" is-repeat>
         <wwElement 
           v-bind="content.stackElement" 
           :ww-props="{ ...stackConfig, items: uncategorizedStack.items, stack: null }"
+          class="ww-kanban-stack"
         ></wwElement>
       </wwLayoutItemContext>
-    </div>
+    </template>
 
-    <div v-for="(stack, index) in internalStacks" class="ww-kanban-stack">
+    <template v-for="(stack, index) in internalStacks" :key="'ww-stack-' + index">
       <wwLayoutItemContext :index="index" :item="null" is-repeat :data="stack" :repeated-items="internalStacks">
         <wwElement 
           v-bind="content.stackElement" 
           :ww-props="{ ...stackConfig, items: stack.items, stack: stack.value }"
+          class="ww-kanban-stack"
         ></wwElement>
       </wwLayoutItemContext>
-    </div>
+    </template>
   </div>
 </template>
 
