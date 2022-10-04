@@ -32,6 +32,8 @@ export default {
   },
   emits: ['trigger-event', 'update:content:effect'],
   setup(props, {emit}) {
+    const { resolveMappingFormula } = wwLib.wwFormula.useFormula()
+
     const internalStacks = ref([])
     const uncategorizedStack = reactive({
       label: 'Uncategorized',
@@ -59,7 +61,7 @@ export default {
           name: 'item:moved',
           event: {
             item: change.added.element,
-            from: wwLib.resolveObjectPropertyPath(change.added.element, props.content.stackedBy),
+            from: resolveMappingFormula(props.content.stackedBy, change.added.element),
             to: stackValue,
             oldIndex: null,
             newIndex: change.added.newIndex,
@@ -82,8 +84,8 @@ export default {
     watch(isDraggingManager, (value) => {
       setDrag(Object.values(value).some(isDragging => isDragging))
     }, {deep: true})
-
-    return { internalStacks, uncategorizedStack }
+    
+    return { internalStacks, uncategorizedStack, resolveMappingFormula }
   },
   computed: {
     stacks() {
@@ -127,23 +129,32 @@ export default {
     },
     items() {
       this.refreshStacks()
-    }
+    },
+    /* wwEditor:start */
+    'wwEditorState.boundProps.stacks'(isBind) {
+        if (!isBind)
+            this.$emit('update:content:effect', {
+                stackLabel: null,
+                stackValue: null,
+            });
+    },
+    /* wwEditor:end */
   },
   methods: {
     refreshStacks() {
       this.internalStacks = this.stacks
           .map(stack => ({
-            label: wwLib.resolveObjectPropertyPath(stack, this.content.stackLabel || 'label') || '',
-            value: wwLib.resolveObjectPropertyPath(stack, this.content.stackValue || 'value') || '',
+            label: this.resolveMappingFormula(this.content.stackLabel, stack, stack.label || ''),
+            value: this.resolveMappingFormula(this.content.stackValue, stack, stack.value || ''),
           }))
           .map(stack => ({
             ...stack,
             items: this.items
-              .filter(item => wwLib.resolveObjectPropertyPath(item, this.content.stackedBy) === stack.value)
+              .filter(item => this.resolveMappingFormula(this.content.stackedBy, item) === stack.value)
               .sort((a, b) => {
                 if(!this.content.sortedBy) return 0
-                const valueA = wwLib.resolveObjectPropertyPath(a, this.content.sortedBy)
-                const valueB = wwLib.resolveObjectPropertyPath(b, this.content.sortedBy)
+                const valueA = this.resolveMappingFormula(this.content.sortedBy, a)
+                const valueB = this.resolveMappingFormula(this.content.sortedBy, b)
                 if (this.content.sortOrder === 'asc') {
                   return valueA > valueB ? 1 : -1
                 } else {
@@ -151,8 +162,8 @@ export default {
                 }
               })
           }))
-      const stacksList = this.stacks.map(stack => wwLib.resolveObjectPropertyPath(stack, this.content.stackValue || 'value'))
-      this.uncategorizedStack.items = this.items.filter(item => !stacksList.includes(wwLib.resolveObjectPropertyPath(item, this.content.stackedBy)))
+      const stacksList = this.stacks.map(stack => this.resolveMappingFormula(this.content.stackValue, stack, stack.value))
+      this.uncategorizedStack.items = this.items.filter(item => !stacksList.includes(this.resolveMappingFormula(this.content.stackedBy, {data: item})))
     },
     /* wwEditor:start */
     getTestEvent() {

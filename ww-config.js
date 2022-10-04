@@ -1,13 +1,9 @@
-function showObjectPropertyPath(basePropertyKey, {content, boundProps}) {
-  return boundProps[basePropertyKey] && content[basePropertyKey] && typeof wwLib.wwCollection.getCollectionData(content[basePropertyKey])[0] === 'object'
+function isBindValid(basePropertyKey, {content, boundProps}) {
+  return boundProps[basePropertyKey] && content[basePropertyKey]
 }
-function getObjectPropertyPathOptions(basePropertyKey, {content}) {
+function getFormulaOptions(basePropertyKey, {content}) {
   const data = wwLib.wwCollection.getCollectionData(content[basePropertyKey])
-  if (!data.length || typeof data[0] !== 'object') {
-      return null;
-  }
-
-  return { object: data[0] };
+  return { template: data.length ? data[0] : null};
 }
 
 export default {
@@ -63,37 +59,34 @@ export default {
       section: 'settings',
     },
     itemKey: {
-      hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('items', {content, boundProps}),
+      hidden: (content, sidepanelContent, boundProps) => !isBindValid('items', {content, boundProps}),
       label: {
           en: 'Item key',
       },
-      type: 'ObjectPropertyPath',
-      options: content => getObjectPropertyPathOptions('items', {content}),
-      defaultValue: null,
+      type: 'Formula',
+      options: content => getFormulaOptions('items', {content}),
       section: 'settings',
     },
     stackedBy: {
-      hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('items', {content, boundProps}),
+      hidden: (content, sidepanelContent, boundProps) => !isBindValid('items', {content, boundProps}),
       label: {
           en: 'Stacked by',
       },
-      type: 'ObjectPropertyPath',
-      options: content => getObjectPropertyPathOptions('items', {content}),
-      defaultValue: null,
+      type: 'Formula',
+      options: content => getFormulaOptions('items', {content}),
       section: 'settings',
     },
     sortedBy: {
-      hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('items', {content, boundProps}),
+      hidden: (content, sidepanelContent, boundProps) => !isBindValid('items', {content, boundProps}),
       label: {
           en: 'Sorted by',
       },
-      type: 'ObjectPropertyPath',
-      options: content => getObjectPropertyPathOptions('items', {content}),
-      defaultValue: null,
+      type: 'Formula',
+      options: content => getFormulaOptions('items', {content}),
       section: 'settings',
     },
     sortOrder: {
-      hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('items', {content, boundProps}) || !content.sortedBy,
+      hidden: (content, sidepanelContent, boundProps) => !isBindValid('items', {content, boundProps}) || !content.sortedBy,
       label: {
         en: 'Sort order'
       },
@@ -116,7 +109,7 @@ export default {
       section: 'settings'
     },
     sortable: {
-      hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('items', {content, boundProps}),
+      hidden: (content, sidepanelContent, boundProps) => !isBindValid('items', {content, boundProps}),
       label: {
         en: 'Sortable',
       },
@@ -165,23 +158,21 @@ export default {
       section: 'settings',
     },
     stackLabel: {
-      hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('stacks', {content, boundProps}),
+      hidden: (content, sidepanelContent, boundProps) => !isBindValid('stacks', {content, boundProps}),
       label: {
-          en: 'Label',
+          en: 'Stack label',
       },
-      type: 'ObjectPropertyPath',
-      options: content => getObjectPropertyPathOptions('stacks', {content}),
-      defaultValue: null,
+      type: 'Formula',
+      options: content => getFormulaOptions('stacks', {content}),
       section: 'settings',
     },
     stackValue: {
-      hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('stacks', {content, boundProps}),
+      hidden: (content, sidepanelContent, boundProps) => !isBindValid('stacks', {content, boundProps}),
       label: {
-          en: 'Value',
+          en: 'Stack value',
       },
-      type: 'ObjectPropertyPath',
-      options: content => getObjectPropertyPathOptions('stacks', {content}),
-      defaultValue: null,
+      type: 'Formula',
+      options: content => getFormulaOptions('stacks', {content}),
       section: 'settings',
     },
   },
