@@ -154,6 +154,20 @@ export default {
       const stacksList = this.stacks.map(stack => wwLib.resolveObjectPropertyPath(stack, this.content.stackValue || 'value'))
       this.uncategorizedStack.items = this.items.filter(item => !stacksList.includes(wwLib.resolveObjectPropertyPath(item, this.content.stackedBy)))
     },
+    /* wwEditor:start */
+    getTestEvent() {
+      if(!this.internalStacks.length) throw new Error('No stack found')
+      if(!this.items.length) throw new Error('No item found')
+      return {
+        item: this.items[0],
+        from: this.internalStacks[0].value,
+        to: this.internalStacks[0].value,
+        oldIndex: 0,
+        newIndex: 1,
+        updatedList: this.items
+      }
+    }
+    /* wwEditor:end */
   },
   created() {
     this.refreshStacks()

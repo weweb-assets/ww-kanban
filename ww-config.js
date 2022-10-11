@@ -33,6 +33,7 @@ export default {
         newIndex: 1,
         updatedList: []
       },
+      getTestEvent: 'getTestEvent',
       default: true
     },
   ],
