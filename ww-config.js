@@ -16,9 +16,9 @@ export default {
       en: 'Kanban',
     },
     bubble: {
-      icon: 'fontawesome/solid/trello-brands',
+      icon: 'template',
     },
-    icon: 'fontawesome/solid/trello-brands',
+    icon: 'template',
     customSettingsPropertiesOrder: ['items', ['itemKey', 'stackedBy', 'sortedBy', 'sortOrder']]
   },
   triggerEvents: [
