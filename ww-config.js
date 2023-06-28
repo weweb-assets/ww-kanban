@@ -48,7 +48,11 @@ export default {
         en: 'Wrap stacks',
       },
       type: 'OnOff',
-      defaultValue: true
+      defaultValue: true,
+      responsive: true,
+      bindable: true,
+      states: true,
+      classes: true,
     },
     items: {
       label: {
