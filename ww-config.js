@@ -238,7 +238,7 @@ export default {
             hidden: (content, sidePanelContent, boundProps, wwProps) => wwProps?.handle?.length,
         },
         handleClass: {
-            label: "Handle class",
+            label: "Class name",
             type: "Text",
             bindable: true,
             section: "settings",

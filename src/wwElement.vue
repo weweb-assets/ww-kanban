@@ -146,7 +146,6 @@ export default {
         items() {
             this.refreshStacks();
         },
-        /* wwEditor:start */
         isReadonly: {
             immediate: true,
             handler(value) {
@@ -157,7 +156,6 @@ export default {
                 }
             },
         },
-        /* wwEditor:end */
     },
     methods: {
         refreshStacks() {
