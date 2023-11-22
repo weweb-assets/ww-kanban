@@ -231,9 +231,9 @@ export default {
             defaultValue: false,
             propertyHelp: {
                 tooltip: `By default, dragging is triggered when a user clicks anywhere on a Kanban item. To trigger the dragging behavior on click of a specific element inside the item:  
-* enable this option  
-* go to that element’s Settings > HTML attributes, and  
-* add the class you choose to its Class attribute.`
+* Enable this option  
+* Go to that element’s Settings > HTML attributes 
+* Add the class you choose to its Class attribute (default: 'draggable'))`
             },
             hidden: (content, sidePanelContent, boundProps, wwProps) => wwProps?.handle?.length,
         },

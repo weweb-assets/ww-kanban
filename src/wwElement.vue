@@ -109,7 +109,7 @@ export default {
                 sortable: this.content.sortable,
                 group: "kanban-" + this.uid,
                 itemKey: this.content.itemKey,
-                handle: this.content.customDragHandle ? this.content.handleClass : null,
+                handle: this.content.customDragHandle ? this.content.handleClass || 'draggable' : null,
                 readonly: this.content.readonly,
             };
         },
