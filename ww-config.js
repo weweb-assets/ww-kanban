@@ -246,6 +246,9 @@ export default {
             bindable: true,
             section: "settings",
             defaultValue: "draggable",
+            options: {
+                placeholder: "draggable",
+            },
             /* wwEditor:start */
             bindingValidation: {
                 type: "string",
