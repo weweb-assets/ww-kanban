@@ -28,7 +28,7 @@ export default {
             ["itemKey", "stackedBy", "sortedBy", "sortOrder"],
             "readonly",
             "customDragHandle",
-            ["handleTips", "handleClass"],
+            ["handleClass"],
         ],
     },
     states: ['readonly'],
@@ -229,16 +229,13 @@ export default {
             type: 'OnOff',
             section: 'settings',
             defaultValue: false,
-        },
-        handleInfo: {
-            label: 'Custom drag info',
-            type: 'Info',
-            options: {
-                text: { en: 'This class must be added on elements to trigger the drag&drop. (Settings > HTML attributes > Class)' },
+            propertyHelp: {
+                tooltip: `By default, dragging is triggered when a user clicks anywhere on a Kanban item. To trigger the dragging behavior on click of a specific element inside the item:  
+* enable this option  
+* go to that element’s Settings > HTML attributes, and  
+* add the class you choose to its Class attribute.`
             },
-            editorOnly: true,
-            section: 'settings',
-            hidden: content => !content.customDragHandle,
+            hidden: (content, sidePanelContent, boundProps, wwProps) => wwProps?.handle?.length,
         },
         handleClass: {
             label: "Handle class",
@@ -246,6 +243,9 @@ export default {
             bindable: true,
             section: "settings",
             defaultValue: "draggable",
+            propertyHelp: {
+                tooltip: 'This class must be added on elements to trigger the drag&drop. (Settings > HTML attributes > Class)'
+            },
             options: {
                 placeholder: "draggable",
             },
@@ -255,7 +255,7 @@ export default {
                 tooltip: "A string that represent the class of the handle",
             },
             /* wwEditor:end */
-            hidden: (content) => !content.customDragHandle,
+            hidden: (content, sidePanelContent, boundProps, wwProps) => !content.customDragHandle || wwProps?.handle?.length,
         },
     },
 };
