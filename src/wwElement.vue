@@ -29,6 +29,10 @@ export default {
     props: {
         content: { type: Object, required: true },
         uid: { type: String, required: true },
+        /* wwEditor:start */
+        wwElementState: { type: Object, required: true },
+        wwEditorState: { type: Object, required: true },
+        /* wwEditor:end */
     },
     emits: ["trigger-event", "update:content:effect"],
     setup(props, { emit }) {
@@ -114,6 +118,14 @@ export default {
                 "--wrap-stacks": this.content.wrapStacks ? "wrap" : "nowrap",
             };
         },
+        isReadonly() {
+            /* wwEditor:start */
+            if (this.wwEditorState.isSelected) {
+                return this.wwElementState.states.includes("readonly");
+            }
+            /* wwEditor:end */
+            return this.content.readonly;
+        },
     },
     watch: {
         "content.stackValue"() {
@@ -134,6 +146,18 @@ export default {
         items() {
             this.refreshStacks();
         },
+        /* wwEditor:start */
+        isReadonly: {
+            immediate: true,
+            handler(value) {
+                if (value) {
+                    this.$emit("add-state", "readonly");
+                } else {
+                    this.$emit("remove-state", "readonly");
+                }
+            },
+        },
+        /* wwEditor:end */
     },
     methods: {
         refreshStacks() {

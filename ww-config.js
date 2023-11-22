@@ -30,6 +30,7 @@ export default {
             "handle",
         ],
     },
+    states: ['readonly'],
     triggerEvents: [
         {
             name: "item:moved",
