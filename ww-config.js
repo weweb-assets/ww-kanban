@@ -27,7 +27,8 @@ export default {
             "items",
             ["itemKey", "stackedBy", "sortedBy", "sortOrder"],
             "readonly",
-            "handle",
+            "customDragHandle",
+            ["handleInfo", "handleClass"],
         ],
     },
     states: ['readonly'],
@@ -223,17 +224,35 @@ export default {
             },
             /* wwEditor:end */
         },
-        handle: {
+        customDragHandle: {
+            label: 'Custom drag',
+            type: 'OnOff',
+            section: 'settings',
+            defaultValue: false,
+        },
+        handleInfo: {
+            label: 'Custom drag info',
+            type: 'Info',
+            options: {
+                text: { en: 'Put a class on elements that should trigger the drag&drop. (Settings > HTML attributes > Class)' },
+            },
+            editorOnly: true,
+            section: 'settings',
+            hidden: content => !content.customDragHandle,
+        },
+        handleClass: {
             label: "Handle class",
             type: "Text",
             bindable: true,
             section: "settings",
+            defaultValue: "draggable",
             /* wwEditor:start */
             bindingValidation: {
                 type: "string",
                 tooltip: "A string that represent the class of the handle",
             },
             /* wwEditor:end */
+            hidden: (content) => !content.customDragHandle,
         },
     },
 };
