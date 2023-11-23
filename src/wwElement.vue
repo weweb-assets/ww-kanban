@@ -161,8 +161,8 @@ export default {
         refreshStacks() {
             this.internalStacks = this.stacks
                 .map((stack) => ({
-                    label: wwLib.resolveObjectPropertyPath(stack, this.content.stackLabel || "label") || "",
-                    value: wwLib.resolveObjectPropertyPath(stack, this.content.stackValue || "value") || "",
+                    label: wwLib.resolveObjectPropertyPath(stack, this.content.stackLabel || "label") ?? "",
+                    value: wwLib.resolveObjectPropertyPath(stack, this.content.stackValue || "value") ?? "",
                 }))
                 .map((stack) => ({
                     ...stack,
