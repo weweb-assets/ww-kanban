@@ -143,8 +143,11 @@ export default {
         stacks() {
             this.refreshStacks();
         },
-        items() {
-            this.refreshStacks();
+        items: {
+            handler() {
+                this.refreshStacks();
+            },
+            deep: true
         },
         isReadonly: {
             immediate: true,
