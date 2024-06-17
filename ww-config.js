@@ -275,6 +275,13 @@ export default {
           { value: "wait", label: "Wait" },
         ],
       },
+      bindable: true,
+      /* wwEditor:start */
+      bindingValidation: {
+        type: "string",
+        tooltip: "A string that represent the cursor type",
+      },
+      /* wwEditor:end */
       defaultValue: "grabbing",
     },
     customDragHandle: {
