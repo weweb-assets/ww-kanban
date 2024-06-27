@@ -151,12 +151,12 @@ export default {
   },
   computed: {
     stacks() {
-      const stacks = wwLib.wwCollection.getCollectionData(this.content.stacks);
+      const stacks = wwLib.wwUtils.getDataFromCollection(this.content.stacks);
       if (!Array.isArray(stacks)) return [];
       return stacks;
     },
     items() {
-      const items = wwLib.wwCollection.getCollectionData(this.content.items);
+      const items = wwLib.wwUtils.getDataFromCollection(this.content.items);
       if (!Array.isArray(items)) return [];
       return items;
     },
