@@ -85,7 +85,7 @@ export default {
             name: "item:moved",
             event: {
               item: change.added.element,
-              from: wwLib.resolveObjectPropertyPath(
+              from: wwLib.wwUtils.resolveObjectPropertyPath(
                 change.added.element,
                 props.content.stackedBy
               ),
@@ -151,12 +151,12 @@ export default {
   },
   computed: {
     stacks() {
-      const stacks = wwLib.wwCollection.getCollectionData(this.content.stacks);
+      const stacks = wwLib.wwUtils.getDataFromCollection(this.content.stacks);
       if (!Array.isArray(stacks)) return [];
       return stacks;
     },
     items() {
-      const items = wwLib.wwCollection.getCollectionData(this.content.items);
+      const items = wwLib.wwUtils.getDataFromCollection(this.content.items);
       if (!Array.isArray(items)) return [];
       return items;
     },
@@ -223,12 +223,12 @@ export default {
       this.internalStacks = this.stacks
         .map((stack) => ({
           label:
-            wwLib.resolveObjectPropertyPath(
+            wwLib.wwUtils.resolveObjectPropertyPath(
               stack,
               this.content.stackLabel || "label"
             ) ?? "",
           value:
-            wwLib.resolveObjectPropertyPath(
+            wwLib.wwUtils.resolveObjectPropertyPath(
               stack,
               this.content.stackValue || "value"
             ) ?? "",
@@ -238,18 +238,18 @@ export default {
           items: this.items
             .filter(
               (item) =>
-                wwLib.resolveObjectPropertyPath(
+                wwLib.wwUtils.resolveObjectPropertyPath(
                   item,
                   this.content.stackedBy
                 ) === stack.value
             )
             .sort((a, b) => {
               if (!this.content.sortedBy) return 0;
-              const valueA = wwLib.resolveObjectPropertyPath(
+              const valueA = wwLib.wwUtils.resolveObjectPropertyPath(
                 a,
                 this.content.sortedBy
               );
-              const valueB = wwLib.resolveObjectPropertyPath(
+              const valueB = wwLib.wwUtils.resolveObjectPropertyPath(
                 b,
                 this.content.sortedBy
               );
@@ -261,7 +261,7 @@ export default {
             }),
         }));
       const stacksList = this.stacks.map((stack) =>
-        wwLib.resolveObjectPropertyPath(
+        wwLib.wwUtils.resolveObjectPropertyPath(
           stack,
           this.content.stackValue || "value"
         )
@@ -269,7 +269,7 @@ export default {
       this.uncategorizedStack.items = this.items.filter(
         (item) =>
           !stacksList.includes(
-            wwLib.resolveObjectPropertyPath(item, this.content.stackedBy)
+            wwLib.wwUtils.resolveObjectPropertyPath(item, this.content.stackedBy)
           )
       );
     },

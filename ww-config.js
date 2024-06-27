@@ -2,12 +2,12 @@ function showObjectPropertyPath(basePropertyKey, { content, boundProps }) {
   return (
     boundProps[basePropertyKey] &&
     content[basePropertyKey] &&
-    typeof wwLib.wwCollection.getCollectionData(content[basePropertyKey])[0] ===
+    typeof wwLib.wwUtils.getDataFromCollection(content[basePropertyKey])[0] ===
       "object"
   );
 }
 function getObjectPropertyPathOptions(basePropertyKey, { content }) {
-  const data = wwLib.wwCollection.getCollectionData(content[basePropertyKey]);
+  const data = wwLib.wwUtils.getDataFromCollection(content[basePropertyKey]);
   if (!data.length || typeof data[0] !== "object") {
     return null;
   }
