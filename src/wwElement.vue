@@ -164,6 +164,12 @@ export default {
         "content.sortOrder"() {
             this.refreshStacks();
         },
+        "content.stacks": {
+            handler() {
+                this.refreshStacks();
+            },
+            deep: true,
+        },
         stacks() {
             this.refreshStacks();
         },
