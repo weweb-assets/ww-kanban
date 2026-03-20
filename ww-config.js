@@ -50,6 +50,7 @@ export default {
             },
             getTestEvent: "getTestEvent",
             default: true,
+            description: "Run when an item is moved.",
         },
     ],
     properties: {
