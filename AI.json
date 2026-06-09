@@ -1,5 +1,6 @@
 {
     "metadata": {
+        "advanced": true,
         "name": "ww-kanban",
         "description": "A Kanban board element that groups item data into draggable stacks and renders each stack through a ww-stack child.",
         "keywords": ["kanban", "board", "tasks", "pipeline", "columns", "cards", "drag and drop", "sortable"],
