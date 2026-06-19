@@ -44,13 +44,13 @@
         },
         {
             "name": "sortedBy",
-            "description": "Optional object property path used to sort items inside each stack.",
+            "description": "Optional object property path used to sort items inside each stack, for example \"due_date\" or \"priority\". Pair it with sortOrder to choose the direction.",
             "type": "string",
             "defaultValue": null
         },
         {
             "name": "sortOrder",
-            "description": "Sort direction for items inside each stack when sortedBy is set.",
+            "description": "Sort direction for items inside each stack when sortedBy is set. Use \"asc\" for ascending (earliest dates, smallest numbers, A-Z first) or \"desc\" for descending (latest dates, largest numbers, Z-A first).",
             "type": "string",
             "options": ["asc", "desc"],
             "defaultValue": "asc"
@@ -199,12 +199,13 @@
         "Set stackedBy to the item field that stores the stack value. Each item value must match one of the stacks values.",
         "The stacks property must resolve to an array of objects. By default each stack object uses label for display and value for matching items.",
         "Use stackLabel and stackValue only when the stack objects use custom field names instead of label and value.",
+        "To sort cards within each stack, set sortedBy to the item property path to sort on (for example \"due_date\") together with sortOrder. \"asc\" shows earliest/smallest values first, \"desc\" shows latest/largest first; phrases like \"earliest first\", \"oldest first\", or \"soonest\" map to sortOrder \"asc\".",
         "Inside the ww-stack headerElement slot, context.item.data is the current stack object with label, value, and items fields.",
         "Inside the ww-stack itemElement slot, context.item.data is the current card/item object.",
         "Do not add a repeat to the stackElement slot or to the ww-stack itemElement slot; repetition is handled by ww-kanban and ww-stack.",
         "Use uncategorizedStack only when unmatched items should remain visible.",
         "Set readonly to true for display-only boards.",
-        "If customDragHandle is true, add the handleClass value as an HTML class on a child element inside the card template.",
+        "If customDragHandle is true you MUST also add the same handleClass value as an HTML class on a child element inside the card template (the ww-stack itemElement), using that child's settings.htmlAttributes.class. Without that class on a child, no card can be dragged.",
         "Use the item:moved event to persist changes to variables, collections, or a backend. The component does not automatically mutate external source data beyond its internal display order."
     ],
     "examples": [
